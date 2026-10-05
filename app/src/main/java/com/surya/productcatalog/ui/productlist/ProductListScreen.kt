@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -59,19 +62,14 @@ fun ProductListScreen(
     viewModel: ProductListViewModel = viewModel(factory = ProductListViewModel.Factory),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val cartItemCount by viewModel.cartItemCount.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.products_title)) },
-                actions = {
-                    IconButton(onClick = onCartClick) {
-                        Icon(
-                            Icons.Filled.ShoppingCart,
-                            contentDescription = stringResource(R.string.open_cart),
-                        )
-                    }
-                },
+                // Lives in the top bar so the cart is reachable even if the list fails to load.
+                actions = { CartIconWithBadge(count = cartItemCount, onClick = onCartClick) },
             )
         },
     ) { innerPadding ->
@@ -98,6 +96,24 @@ fun ProductListScreen(
                     onProductClick = onProductClick,
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun CartIconWithBadge(count: Int, onClick: () -> Unit) {
+    IconButton(onClick = onClick) {
+        BadgedBox(
+            badge = {
+                if (count > 0) {
+                    Badge { Text(if (count > 99) "99+" else count.toString()) }
+                }
+            },
+        ) {
+            Icon(
+                Icons.Filled.ShoppingCart,
+                contentDescription = pluralStringResource(R.plurals.open_cart_with_count, count, count),
+            )
         }
     }
 }

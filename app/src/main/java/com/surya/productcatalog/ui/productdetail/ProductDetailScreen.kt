@@ -52,10 +52,7 @@ import kotlinx.coroutines.launch
 fun ProductDetailScreen(
     productId: Int,
     onBack: () -> Unit,
-    viewModel: ProductDetailViewModel = viewModel(
-        key = "product_$productId",
-        factory = ProductDetailViewModel.factory(productId),
-    ),
+    viewModel: ProductDetailViewModel = viewModel(factory = ProductDetailViewModel.factory(productId)),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }

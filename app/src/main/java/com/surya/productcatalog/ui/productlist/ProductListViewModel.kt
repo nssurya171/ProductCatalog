@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.surya.productcatalog.ProductCatalogApplication
 import com.surya.productcatalog.data.AppResult
+import com.surya.productcatalog.data.CartRepository
 import com.surya.productcatalog.data.ProductRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -29,7 +30,10 @@ import kotlinx.coroutines.flow.stateIn
 private const val SEARCH_DEBOUNCE_MS = 400L
 
 @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-class ProductListViewModel(private val repository: ProductRepository) : ViewModel() {
+class ProductListViewModel(
+    private val repository: ProductRepository,
+    cartRepository: CartRepository,
+) : ViewModel() {
 
     /**
      * The text in the search bar. Kept as Compose state (not a StateFlow) because
@@ -57,6 +61,10 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
             // Eagerly: keep the result while the user is on another screen,
             // so coming back doesn't trigger a reload.
             .stateIn(viewModelScope, SharingStarted.Eagerly, ProductListUiState.Loading)
+
+    /** Total quantity in the cart, for the badge on the cart icon. Comes from Room. */
+    val cartItemCount: StateFlow<Int> = cartRepository.totalCount
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
 
     fun onQueryChange(newQuery: String) {
         query = newQuery
@@ -90,7 +98,10 @@ class ProductListViewModel(private val repository: ProductRepository) : ViewMode
         val Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as ProductCatalogApplication
-                ProductListViewModel(app.container.productRepository)
+                ProductListViewModel(
+                    repository = app.container.productRepository,
+                    cartRepository = app.container.cartRepository,
+                )
             }
         }
     }
