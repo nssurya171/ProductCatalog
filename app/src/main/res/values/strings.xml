@@ -10,4 +10,16 @@
     <string name="clear_search">Clear search</string>
     <string name="no_products">No products available.</string>
     <string name="no_search_results">No products found for \"%1$s\".</string>
+
+    <!-- Product details -->
+    <string name="details_title">Product details</string>
+    <string name="back">Back</string>
+    <string name="label_category">Category</string>
+    <string name="label_brand">Brand</string>
+    <string name="label_stock">Stock</string>
+    <string name="brand_unknown">Not specified</string>
+    <string name="stock_available">%1$d available</string>
+    <string name="out_of_stock">Out of stock</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="added_to_cart">Added to cart</string>
 </resources>
