@@ -125,4 +125,3 @@ The cart is a single Room table, `cart_items`:
 - **Prices use `Double`.** This is acceptable for display, but a real store should use integer cents or `BigDecimal` to avoid rounding errors.
 - **No stock limit.** The quantity can go above the product's stock, and out-of-stock products can still be added.
 - **No automated tests.** The repositories and ViewModels take their dependencies through the constructor, so unit tests with fakes would be straightforward to add.
-- **The categories endpoint is unused.** `ProductApi.getCategories()` exists, but there is no category filter in the UI.

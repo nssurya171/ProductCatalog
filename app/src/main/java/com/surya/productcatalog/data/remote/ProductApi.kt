@@ -1,6 +1,5 @@
 package com.surya.productcatalog.data.remote
 
-import com.surya.productcatalog.data.remote.dto.CategoryDto
 import com.surya.productcatalog.data.remote.dto.ProductDto
 import com.surya.productcatalog.data.remote.dto.ProductsResponseDto
 import retrofit2.http.GET
@@ -25,7 +24,4 @@ interface ProductApi {
 
     @GET("products/{id}")
     suspend fun getProduct(@Path("id") id: Int): ProductDto
-
-    @GET("products/categories")
-    suspend fun getCategories(): List<CategoryDto>
 }
