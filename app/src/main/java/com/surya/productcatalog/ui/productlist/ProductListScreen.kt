@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,13 +55,24 @@ import com.surya.productcatalog.ui.components.formatRating
 @Composable
 fun ProductListScreen(
     onProductClick: (Int) -> Unit,
+    onCartClick: () -> Unit,
     viewModel: ProductListViewModel = viewModel(factory = ProductListViewModel.Factory),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(stringResource(R.string.products_title)) })
+            TopAppBar(
+                title = { Text(stringResource(R.string.products_title)) },
+                actions = {
+                    IconButton(onClick = onCartClick) {
+                        Icon(
+                            Icons.Filled.ShoppingCart,
+                            contentDescription = stringResource(R.string.open_cart),
+                        )
+                    }
+                },
+            )
         },
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
